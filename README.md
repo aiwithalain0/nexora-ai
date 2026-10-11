@@ -1,6 +1,5 @@
 
-https://github.com/user-attachments/assets/f2c8252f-6691-49c2-840c-093d7a219752
-
+https://github.com/user-attachments/assets/d3fa7b04-4d0c-407b-b466-e96eff8bada5
 
 # Nexora AI — Knowledge, Connected.
 
