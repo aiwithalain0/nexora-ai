@@ -1,3 +1,7 @@
+
+https://github.com/user-attachments/assets/f2c8252f-6691-49c2-840c-093d7a219752
+
+
 # Nexora AI — Knowledge, Connected.
 
 **Nexora AI** is a Retrieval-Augmented Generation (RAG) knowledge assistant that helps users upload company documents, ask questions in natural language, and retrieve answers grounded in relevant document content.
