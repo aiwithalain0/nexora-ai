@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexora AI — RAG Knowledge Assistant</title>
+  <meta name="description" content="AI-powered internal knowledge assistant with hybrid retrieval, dynamic document indexing, and verified citations." />
+  <link rel="icon" type="image/jpeg" href="/static/nexora-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <!-- ═══ Sidebar ═══ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-brand">
+          <div class="brand-logo" title="Nexora AI">
+            <img src="/static/nexora-logo.jpg" alt="Nexora AI logo" class="brand-logo-img" />
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Nexora AI</span>
+            <span class="brand-version">v2.1</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+          <ul class="nav-list">
+            <li>
+              <button class="nav-item active" data-page="chat" id="navChat" aria-current="page">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>Chat Assistant</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item" data-page="knowledge" id="navKnowledge">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                <span>Knowledge Base</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item" data-page="evaluation" id="navEvaluation">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <span>Retrieval Evaluation</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-item" data-page="settings" id="navSettings">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>Settings</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="index-status-badge" id="sidebarStatus">
+            <span class="status-dot" id="sidebarDot"></span>
+            <span class="status-label" id="sidebarStatusLabel">Checking index…</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+    </aside>
+
+    <!-- ═══ Mobile Top Bar ═══ -->
+    <div class="mobile-bar" id="mobileBar">
+      <div class="mobile-bar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="mobile-brand-group">
+          <img src="/static/nexora-logo.jpg" alt="Nexora AI logo" class="mobile-logo-img" />
+          <span class="mobile-title">Nexora AI</span>
+        </div>
+      </div>
+      <span class="mobile-status" id="mobileStatusDot"></span>
+    </div>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="main-content" id="mainContent">
+
+      <!-- ─── PAGE: Chat Assistant ─── -->
+      <section class="page page-chat active" id="pageChat">
+        <!-- Top Bar -->
+        <header class="chat-header">
+          <div class="chat-header-left">
+            <div class="header-titles">
+              <h1 class="header-title">Nexora AI Knowledge Assistant</h1>
+              <p class="header-subtitle">Search enterprise policies, manuals & guides</p>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <!-- Retrieval Mode Selector -->
+            <div class="retrieval-mode-selector" id="retrievalSelector" role="group" aria-label="Retrieval method">
+              <span class="selector-label">Mode:</span>
+              <button type="button" class="retrieval-btn active" data-method="hybrid" title="Combines BM25 keywords + semantic vector similarity">Hybrid</button>
+              <button type="button" class="retrieval-btn" data-method="vector" title="Semantic meaning search via BAAI embeddings">Vector</button>
+              <button type="button" class="retrieval-btn" data-method="bm25" title="Keyword-matching via Okapi BM25">BM25</button>
+            </div>
+            <button class="btn-ghost" id="clearChatBtn" title="Clear chat history">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              <span>Clear</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Messages Scroll Area -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-scroll-inner" id="chatArea">
+            <!-- Welcome / Empty State -->
+            <div class="welcome-card" id="welcomeState">
+              <div class="welcome-icon">
+                <img src="/static/nexora-logo.jpg" alt="Nexora AI logo" class="welcome-logo-img" />
+              </div>
+              <h2 class="welcome-heading">Ask Nexora AI</h2>
+              <p class="welcome-description">Get precise answers from your indexed documents with hybrid retrieval and verified source citations.</p>
+
+              <div class="example-prompts" id="examplePrompts">
+                <button class="example-chip" data-question="What is the company's leave policy?">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  What is the company's leave policy?
+                </button>
+                <button class="example-chip" data-question="Who is responsible for managing the team?">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  Who is responsible for managing the team?
+                </button>
+                <button class="example-chip" data-question="What are the company's working hours?">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  What are the company's working hours?
+                </button>
+                <button class="example-chip" data-question="What should an employee do if they forget their password?">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  What should I do if I forget my password?
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Row -->
+          <div class="loading-row hidden" id="loadingRow">
+            <div class="msg-avatar ai-avatar-small">
+              <img src="/static/nexora-logo.jpg" alt="Nexora AI logo" class="avatar-logo-img" />
+            </div>
+            <div class="loading-content">
+              <div class="typing-indicator"><span></span><span></span><span></span></div>
+              <span class="loading-label" id="loadingLabel">Retrieving and generating…</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="chat-input-wrapper">
+          <form id="askForm" class="chat-input-form" autocomplete="off">
+            <div class="chat-input-box">
+              <textarea id="questionInput" class="chat-textarea" rows="1" placeholder="Ask a question about your documents…" required></textarea>
+              <button type="submit" class="send-button" id="sendBtn" title="Send (Enter)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
+            <div class="input-meta">
+              <span><kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> new line</span>
+              <span class="active-method-label" id="activeMethodLabel">Hybrid retrieval</span>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ─── PAGE: Knowledge Base ─── -->
+      <section class="page page-knowledge" id="pageKnowledge">
+        <header class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Knowledge Base</h1>
+            <p class="page-subtitle">Upload documents, manage indexed files, and inspect vector chunks</p>
+          </div>
+          <div class="page-header-right">
+            <button class="btn-secondary" id="refreshKbBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </header>
+        <div class="page-body" id="knowledgeBody">
+          <div class="loading-page"><div class="spinner"></div><span>Loading knowledge base…</span></div>
+        </div>
+      </section>
+
+      <!-- ─── PAGE: Evaluation ─── -->
+      <section class="page page-evaluation" id="pageEvaluation">
+        <header class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Retrieval Evaluation</h1>
+            <p class="page-subtitle">Performance metrics across BM25, Vector, and Hybrid retrieval</p>
+          </div>
+        </header>
+        <div class="page-body" id="evaluationBody">
+          <div class="loading-page"><div class="spinner"></div><span>Loading evaluation data…</span></div>
+        </div>
+      </section>
+
+      <!-- ─── PAGE: Settings ─── -->
+      <section class="page page-settings" id="pageSettings">
+        <header class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Configure application preferences, retrieval modes, and system information</p>
+          </div>
+          <div class="page-header-right">
+            <span class="settings-save-badge hidden" id="settingsSavedBadge">Preferences Saved</span>
+          </div>
+        </header>
+        <div class="page-body" id="settingsBody">
+          <div class="loading-page"><div class="spinner"></div><span>Loading settings…</span></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop hidden" id="deleteModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon-danger">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        </div>
+        <div class="modal-title-wrap">
+          <h3 class="modal-title">Delete Document</h3>
+          <p class="modal-desc">This action will remove the document and its vector embeddings from ChromaDB.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently remove <strong id="deleteModalDocName">document.pdf</strong>? This content will no longer be retrieved during AI chat queries.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" class="btn-danger" id="confirmDeleteBtn">Delete Document</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

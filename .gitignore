@@ -1,0 +1,29 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Secrets
+.env
+
+# Local documents and generated indexes
+data/raw/
+data/processed/
+index/
+
+# Tests
+.pytest_cache/
+model_cache/
+
+# Additional secrets
+.env.*
+!.env.example
+
+# Python test and build files
+*.egg-info/
+dist/
+build/
+
+# Generated evaluation results
+results/

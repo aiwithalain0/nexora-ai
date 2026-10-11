@@ -1,0 +1,40 @@
+
+[
+  {
+    "id": "q1",
+    "question": "What is the company's leave policy?",
+    "relevant_chunk_ids": [
+      "NovaWorks_Company_Handbook_and_Policies.pdf::p2::c1",
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p5::c1"
+    ]
+  },
+  {
+    "id": "q2",
+    "question": "Who is responsible for managing the team?",
+    "relevant_chunk_ids": [
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p2::c0"
+    ]
+  },
+  {
+    "id": "q3",
+    "question": "How can an employee contact technical support?",
+    "relevant_chunk_ids": [
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p6::c0",
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p9::c0"
+    ]
+  },
+  {
+    "id": "q4",
+    "question": "What are the company's working hours?",
+    "relevant_chunk_ids": [
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p5::c0"
+    ]
+  },
+  {
+    "id": "q5",
+    "question": "What should an employee do if they forget their password?",
+    "relevant_chunk_ids": [
+      "NovaWorks_Team_Directory_and_FAQ.pdf::p6::c0"
+    ]
+  }
+]
